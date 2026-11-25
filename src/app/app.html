@@ -1,0 +1,74 @@
+<div class="app-shell">
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">◆</span>
+      <span class="brand-title">TECHBENCH 3D</span>
+      <span class="sprint-badge">Mobile & Multi-Equipamentos</span>
+      @if (visits.visitCount(); as totalVisits) {
+        <span class="visits-badge" title="Total de acessos registrados nesta página">
+          👁 {{ totalVisits }} acessos
+        </span>
+      }
+    </div>
+
+    <div class="header-meta">
+      <button
+        type="button"
+        class="equipment-switcher-btn"
+        (click)="facade.openEquipmentModal()"
+        title="Trocar equipamento ou criar bancada personalizada"
+      >
+        🖥 {{ facade.activeEquipment().shortName }} ▾
+      </button>
+
+      <button
+        type="button"
+        class="user-pill-btn"
+        (click)="facade.openWelcomeModal()"
+        title="Trocar usuário técnico ou ver boas-vindas"
+      >
+        👤 {{ facade.playerName() }}
+      </button>
+
+      <button
+        type="button"
+        class="progress-pill-btn"
+        (click)="facade.openEvaluationModal()"
+        title="Abrir Relatório, Níveis, Desafios, Ranking e Certificado Interno"
+      >
+        🏆 Nv. {{ facade.technicianLevel().level }} · {{ facade.totalXp() }} XP
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="viewport-area" aria-label="Cena 3D da bancada de hardware">
+      <app-viewport-3d />
+
+      <!-- Gatilho do Bottom Sheet exibido apenas em Mobile (Portrait & Landscape) -->
+      <button
+        type="button"
+        class="mobile-sheet-trigger"
+        (click)="toggleMobileSheet()"
+        [attr.aria-expanded]="mobileSheetOpen()"
+      >
+        {{ mobileSheetOpen() ? '✕ Fechar Painel' : '▲ Painel Técnico' }}
+      </button>
+    </section>
+
+    <section class="sidebar-area" [class.sheet-open]="mobileSheetOpen()">
+      <div class="sheet-handle-bar" (click)="toggleMobileSheet()">
+        <span class="sheet-pill" aria-hidden="true"></span>
+        <span class="sheet-label">
+          {{ mobileSheetOpen() ? 'Toque para recolher' : 'Painel Técnico' }}
+        </span>
+      </div>
+      <app-inspector-sidebar />
+    </section>
+  </main>
+
+  <app-evaluation-modal />
+  <app-equipment-selector-modal />
+  <app-mobile-orientation-banner />
+  <app-welcome-modal />
+</div>
